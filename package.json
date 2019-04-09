@@ -1,0 +1,18 @@
+{
+  "name": "aws-rest-api-offline",
+  "version": "1.0.0",
+  "description": "Serverless REST API with DynamoDB and offline support",
+  "repository": "",
+  "author": "Christoph Gysin <christoph.gysin@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^3.0.5",
+    "serverless-dynamodb-local": "0.2.35",
+    "uuid": "^3.3.2",
+    "validator": "^10.11.0"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.12.0",
+    "serverless-offline": "^4.9.2"
+  }
+}
