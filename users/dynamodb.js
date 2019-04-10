@@ -25,7 +25,7 @@ module.exports.get = async (email) => {
   };
 
   try {
-    return await dynamodb.query(params)
+    return await dynamodb.query(params).promise()
   } catch (error) {
     console.error(error)
     return null
