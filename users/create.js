@@ -3,9 +3,8 @@
 const validator = require('validator');
 const uuid = require('uuid');
 const bcrypt = require('bcrypt');
-const dynamodb = require('./dynamodb');
-
-const saltRounds = 10;
+const { dynamodb } = require('./dynamodb');
+const { hash } = require('./utils/password')
 
 // create structure of a result
 // return validation with proper hints
@@ -35,7 +34,7 @@ const validatePassword = async pass => {
   if (pass == null) {
     error = 'Please Supply a password.';
   } else {
-    value = await bcrypt.hash(pass, saltRounds);
+    value = await hash(pass);
   }
 
   return {
@@ -85,7 +84,8 @@ module.exports.create = async (event, context) => {
       body: JSON.stringify({
         status: 'success',
         data: {
-          id: params.Item.id
+          id: params.Item.id,
+          ...params.Item
         }
       }),
     };

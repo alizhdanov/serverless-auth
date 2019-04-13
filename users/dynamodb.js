@@ -25,11 +25,14 @@ module.exports.get = async (email) => {
   };
 
   try {
-    return await dynamodb.query(params).promise()
+    // TODO: change query to something that return only one item
+    const data = await client.query(params).promise();
+
+    return data.Items[0] || null
   } catch (error) {
     console.error(error)
     return null
   }
 }
 
-module.exports = client;
+module.exports.dynamodb = client;
