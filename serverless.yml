@@ -15,13 +15,11 @@ custom:
       seed: true
     migration:
       dir: offline/migrations
-    # seed:
-    #   domain:
-    #     sources:
-    #       - table: domain-widgets
-    #         sources: [./domainWidgets.json]
-    #       - table: domain-fidgets
-    #         sources: [./domainFidgets.json]
+    seed:
+      domain:
+        sources:
+          - table: ${self:provider.environment.DYNAMODB_TABLE}
+            sources: [./offline/seeds/users.json]
 
 provider:
   name: aws
@@ -54,12 +52,20 @@ functions:
           path: users
           method: get
           cors: true
-  get:
-    handler: users/get.get
+#  get:
+#    handler: users/get.get
+#    events:
+#      - http:
+#          path: users/{id}
+#          method: get
+#          cors: true
+
+  login:
+    handler: users/login.handler
     events:
       - http:
-          path: users/{id}
-          method: get
+          path: login
+          method: post
           cors: true
   # update:
   #   handler: todos/update.update
