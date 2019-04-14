@@ -14,7 +14,7 @@ if (process.env.IS_OFFLINE) {
 
 const client = new AWS.DynamoDB.DocumentClient(options);
 
-module.exports.get = async (email) => {
+module.exports.get = async email => {
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
     IndexName: 'EmailsIndex',
@@ -28,11 +28,26 @@ module.exports.get = async (email) => {
     // TODO: change query to something that return only one item
     const data = await client.query(params).promise();
 
-    return data.Items[0] || null
+    return data.Items[0] || null;
   } catch (error) {
-    console.error(error)
-    return null
+    console.error(error);
+    return null;
   }
-}
+};
+
+module.exports.put = async item => {
+  const params = {
+    TableName: process.env.DYNAMODB_TABLE,
+    Item: item,
+  };
+  try {
+    const data = await dynamodb.put(params).promise();
+
+    // TODO: I'd return here something from payload
+    return item;
+  } catch (error) {
+    return null;
+  }
+};
 
 module.exports.dynamodb = client;

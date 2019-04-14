@@ -3,20 +3,12 @@
 const jwt = require('jsonwebtoken');
 const { get } = require('./dynamodb');
 const { compare } = require('./utils/password')
+const { generatePayload } = require('./utils/payload');
 
 const NO_EMAIL = 'Please provide email.'
 const NO_PASSWORD = 'Please provide password.'
 const NOT_FOUND = 'User does not exist.'
 const WRONG_PASSWORD = 'Wrong password.'
-
-// TODO: move it into helpers
-const generatePayload = (status, body) => {
-    return {
-        statusCode: status,
-        headers: { 'Content-Type': 'application/json'},
-        body: JSON.stringify(body),
-    }
-}
 
 module.exports.handler = async (event, context) => {
     const body = JSON.parse(event.body);
@@ -52,7 +44,7 @@ module.exports.handler = async (event, context) => {
             errors: [WRONG_PASSWORD]
         })
     }
-
+e
     const token = jwt.sign({
         data: { user: user.email }
     }, 'secret', { expiresIn: 60 * 60 * 24 });
