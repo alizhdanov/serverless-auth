@@ -24,6 +24,7 @@ custom:
 provider:
   name: aws
   runtime: nodejs8.10
+  stage: prod
   environment:
     DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
   iamRoleStatements:
