@@ -7,7 +7,7 @@ const { generatePayload, payloadError } = require('./utils/payload');
 const { validateEmail, validatePassword } = require('./utils/rules')
 
 
-module.exports.handler = async (event, context) => {
+exports.handler = async (event, context) => {
   const timestamp = Date.now();
   const data = JSON.parse(event.body);
   const errors = [];

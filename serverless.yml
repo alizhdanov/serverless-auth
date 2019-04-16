@@ -1,4 +1,4 @@
-service: serverless-rest-api-with-dynamodb
+service: alizhdanov-auth
 
 frameworkVersion: ">=1.1.0 <2.0.0"
 
@@ -39,26 +39,12 @@ provider:
 
 functions:
   create:
-    handler: users/create.create
+    handler: users/signup.handler
     events:
       - http:
-          path: users
+          path: signup
           method: post
           cors: true
-  list:
-    handler: users/list.list
-    events:
-      - http:
-          path: users
-          method: get
-          cors: true
-#  get:
-#    handler: users/get.get
-#    events:
-#      - http:
-#          path: users/{id}
-#          method: get
-#          cors: true
 
   login:
     handler: users/login.handler
@@ -67,20 +53,6 @@ functions:
           path: login
           method: post
           cors: true
-  # update:
-  #   handler: todos/update.update
-  #   events:
-  #     - http:
-  #         path: todos/{id}
-  #         method: put
-  #         cors: true
-  # delete:
-  #   handler: todos/delete.delete
-  #   events:
-  #     - http:
-  #         path: todos/{id}
-  #         method: delete
-  #         cors: true
 
 resources:
   Resources:
