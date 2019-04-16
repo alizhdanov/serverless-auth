@@ -15,6 +15,7 @@ exports.handler = async (event, context) => {
   const body = JSON.parse(event.body);
   const errors = [];
 
+
   if (!(body && body.email)) {
     errors.push(NO_EMAIL);
   }
