@@ -45,7 +45,7 @@ exports.put = async item => {
     const data = await dynamodb.put(params).promise();
 
     // TODO: I'd return here something from payload
-    return item;
+    return data;
   } catch (error) {
     return null;
   }

@@ -26,11 +26,12 @@ exports.handler = async (event, context) => {
     updatedAt: timestamp,
   };
 
-  const user = await put(item);
+  const response = await put(item);
 
   return generatePayload(200, {
     data: {
       id: item.id,
+      response
     },
   });
 };
