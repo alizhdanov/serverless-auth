@@ -1,6 +1,6 @@
 'use strict';
 
-const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
+const AWS = require('aws-sdk/index'); // eslint-disable-line import/no-extraneous-dependencies
 
 let options = {};
 
@@ -14,7 +14,7 @@ if (process.env.IS_OFFLINE) {
 
 const client = new AWS.DynamoDB.DocumentClient(options);
 
-module.exports.get = async email => {
+exports.get = async email => {
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
     IndexName: 'EmailsIndex',
@@ -35,7 +35,8 @@ module.exports.get = async email => {
   }
 };
 
-module.exports.put = async item => {
+
+exports.put = async item => {
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
     Item: item,
@@ -50,4 +51,5 @@ module.exports.put = async item => {
   }
 };
 
-module.exports.dynamodb = client;
+exports.dynamodb = client;
+

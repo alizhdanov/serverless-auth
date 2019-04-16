@@ -1,6 +1,11 @@
 const { handler } = require('../login');
-const dynamodb = require('../dynamodb');
+const dynamodb = require('../utils/dynamodb');
+const password = require('../utils/password');
 const jsonwebtoken = require('jsonwebtoken');
+
+jest.mock('../utils/dynamodb')
+jest.mock('../utils/password')
+jest.mock('jsonwebtoken')
 
 describe('login', () => {
   it('returns error if empty body', async () => {
@@ -45,6 +50,7 @@ describe('login', () => {
   it('returns token on success', async () => {
     jest.spyOn(dynamodb, 'get').mockImplementation(() => ({ password: '123' }));
     jest.spyOn(jsonwebtoken, 'sign').mockImplementation(() => '123');
+    jest.spyOn(password, 'compare').mockImplementation(() => true);
     const data = await handler({
       body: '{"email": "123@123.com", "password": "123"}',
     });

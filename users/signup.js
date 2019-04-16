@@ -2,44 +2,10 @@
 
 const validator = require('validator');
 const uuid = require('uuid');
-const bcrypt = require('bcrypt');
-const { dynamodb, put } = require('./dynamodb');
-const { hash } = require('./utils/password');
+const { put } = require('./utils/dynamodb');
 const { generatePayload, payloadError } = require('./utils/payload');
+const { validateEmail, validatePassword } = require('./utils/rules')
 
-// TODO: unify validation messages
-// TODO: or reuse this validation
-
-const validateEmail = email => {
-  let error = null;
-
-  if (!email) {
-    error = 'Please Supply an email address.';
-  } else if (!validator.isEmail(email)) {
-    error = 'Invalid Email Address.';
-  }
-
-  return {
-    error,
-    value: email,
-  };
-};
-
-const validatePassword = async pass => {
-  let error = null;
-  let value = null;
-
-  if (pass == null) {
-    error = 'Please Supply a password.';
-  } else {
-    value = await hash(pass);
-  }
-
-  return {
-    error,
-    ...(value && { value }),
-  };
-};
 
 module.exports.handler = async (event, context) => {
   const timestamp = Date.now();
@@ -62,20 +28,9 @@ module.exports.handler = async (event, context) => {
 
   const user = await put(item);
 
-  if (user) {
-    return generatePayload(200, {
-      data: {
-        id: item.id,
-        // TODO: remove it
-        // ...item,
-      },
-    });
-  } else {
-    // TODO: change it
-    return {
-      statusCode: 501,
-      headers: { 'Content-Type': 'text/plain' },
-      body: "Couldn't create the todo item.",
-    };
-  }
+  return generatePayload(200, {
+    data: {
+      id: item.id,
+    },
+  });
 };
