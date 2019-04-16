@@ -38,6 +38,6 @@ describe('signup', () => {
             body: '{"email": "123@123.com", "password": "123"}',
         });
         expect(data.statusCode).toBe(200);
-        expect(data.body).toBe(`{"data":{"id":"1"}}`);
+        expect(data.body).toBe(`{"data":{"id":"1","response":{"id":"1"}}}`);
     });
 });
