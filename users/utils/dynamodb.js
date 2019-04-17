@@ -24,32 +24,19 @@ exports.get = async email => {
     },
   };
 
-  try {
-    // TODO: change query to something that return only one item
-    const data = await client.query(params).promise();
+  // TODO: change query to something that return only one item
+  const data = await client.query(params).promise();
 
-    return data.Items[0] || null;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
+  return data.Items[0] || null;
 };
-
 
 exports.put = async item => {
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
     Item: item,
   };
-  try {
-    const data = await dynamodb.put(params).promise();
 
-    // TODO: I'd return here something from payload
-    return data;
-  } catch (error) {
-    return null;
-  }
+  return await client.put(params).promise();
 };
 
 exports.dynamodb = client;
-

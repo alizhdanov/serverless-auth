@@ -15,7 +15,6 @@ exports.handler = async (event, context) => {
   const body = JSON.parse(event.body);
   const errors = [];
 
-
   if (!(body && body.email)) {
     errors.push(NO_EMAIL);
   }
@@ -30,29 +29,33 @@ exports.handler = async (event, context) => {
     });
   }
 
-  const user = await get(body.email);
+  try {
+    const user = await get(body.email);
 
-  if (!user) {
-    return generatePayload(400, {
-      errors: [NOT_FOUND],
-    });
+    if (!user) {
+      return generatePayload(400, {
+        errors: [NOT_FOUND],
+      });
+    }
+
+    const isPasswordMatch = await compare(body.password, user.password);
+
+    if (!isPasswordMatch) {
+      return generatePayload(400, {
+        errors: [WRONG_PASSWORD],
+      });
+    }
+
+    const token = jwt.sign(
+      {
+        data: { user: user.email },
+      },
+      'secret',
+      { expiresIn: 60 * 60 * 24 }
+    );
+
+    return generatePayload(200, { data: { token } });
+  } catch (error) {
+    return generatePayload(error.statusCode, { errors: [error.message] });
   }
-
-  const isPasswordMatch = await compare(body.password, user.password);
-
-  if (!isPasswordMatch) {
-    return generatePayload(400, {
-      errors: [WRONG_PASSWORD],
-    });
-  }
-
-  const token = jwt.sign(
-    {
-      data: { user: user.email },
-    },
-    'secret',
-    { expiresIn: 60 * 60 * 24 }
-  );
-
-  return generatePayload(200, { data: { token } });
 };

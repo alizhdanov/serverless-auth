@@ -26,12 +26,16 @@ exports.handler = async (event, context) => {
     updatedAt: timestamp,
   };
 
-  const response = await put(item);
+  try {
+    const response = await put(item);
 
-  return generatePayload(200, {
-    data: {
-      id: item.id,
-      response
-    },
-  });
+    return generatePayload(200, {
+      data: {
+        id: item.id,
+        response
+      },
+    });
+  } catch (error) {
+    return generatePayload(error.statusCode, { errors: [error.message] });
+  }
 };
