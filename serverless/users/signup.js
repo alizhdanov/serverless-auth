@@ -2,10 +2,10 @@
 
 const validator = require('validator');
 const uuid = require('uuid');
-const { put } = require('./utils/dynamodb');
+const { put, get } = require('./utils/dynamodb');
 const { generatePayload, payloadError } = require('./utils/payload');
-const { validateEmail, validatePassword } = require('./utils/rules')
-
+const { validateEmail, validatePassword } = require('./utils/rules');
+const { USER_EXISTS } = require('./utils/constants');
 
 exports.handler = async (event, context) => {
   const timestamp = Date.now();
@@ -27,12 +27,19 @@ exports.handler = async (event, context) => {
   };
 
   try {
+    const user = await get(email.value);
+
+    if (user) {
+      return generatePayload(400, {
+        errors: [USER_EXISTS],
+      });
+    }
+
     const response = await put(item);
 
     return generatePayload(200, {
       data: {
         id: item.id,
-        response
       },
     });
   } catch (error) {

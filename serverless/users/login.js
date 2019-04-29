@@ -46,6 +46,7 @@ exports.handler = async (event, context) => {
       });
     }
 
+    // TODO: move secret somewhere toos
     const token = jwt.sign(
       {
         data: { user: user.email },

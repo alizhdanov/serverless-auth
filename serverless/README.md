@@ -1,3 +1,5 @@
+TODO implement refresh token
+
 <!--
 title: 'AWS Serverless REST API with DynamoDB and offline support example in NodeJS'
 description: 'This example demonstrates how to run a service locally, using the ''serverless-offline'' plugin. It provides a REST API to manage Todos stored in DynamoDB.'

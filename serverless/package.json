@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "dev": "sls offline start"
+    "dev": "sls offline start",
+    "deploy": "sls deploy"
   },
   "dependencies": {
     "aws-sdk": "^2.438.0",

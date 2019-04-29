@@ -3,9 +3,9 @@ const dynamodb = require('../utils/dynamodb');
 const password = require('../utils/password');
 const jsonwebtoken = require('jsonwebtoken');
 
-jest.mock('../utils/dynamodb')
-jest.mock('../utils/password')
-jest.mock('jsonwebtoken')
+jest.mock('../utils/dynamodb');
+jest.mock('../utils/password');
+jest.mock('jsonwebtoken');
 
 describe('login', () => {
   it('returns error if empty body', async () => {

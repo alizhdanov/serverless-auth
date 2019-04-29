@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  build_serverless:
     docker:
       - image: circleci/node:8.10
 
@@ -10,7 +10,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-{{ checksum "serverless/package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
@@ -18,18 +18,24 @@ jobs:
           name: Install Serverless CLI and dependencies
           command: |
             sudo yarn global add serverless
-            yarn install
+            cd serverless && yarn install
 
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v1-dependencies-{{ checksum "serverless/package.json" }}
 
       # run tests!
       - run:
           name: Run tests
-          command: yarn test
+          command: cd serverless && yarn test
 
       - run:
           name: Deploy application
-          command: sls deploy
+          command: cd serverless && sls deploy
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build_serverless
