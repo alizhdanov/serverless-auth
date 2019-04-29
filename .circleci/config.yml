@@ -1,7 +1,25 @@
 # TODO: add monorepo features
-# TODO: move repeated code into some alias
 
-version: 2
+version: 2.1
+commands:
+  install_deps:
+    steps:
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
 jobs:
   build_serverless:
     docker:
@@ -13,25 +31,12 @@ jobs:
       - checkout:
           path: ~/project
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
       - run:
-          name: Install Serverless CLI and dependencies
-          command: |
-            sudo yarn global add serverless
-            yarn install
+          name: Install Serverless CLI
+          command: sudo yarn global add serverless
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+      - install_deps
 
-      # run tests!
       - run:
           name: Run tests
           command: yarn test
@@ -50,22 +55,11 @@ jobs:
       - checkout:
           path: ~/project
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+      - install_deps
 
-      - run: yarn install
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-
-      # run tests!
-      - run: yarn test
+      - run:
+          name: Run tests
+          command: yarn test
 
       - deploy:
           command: |
