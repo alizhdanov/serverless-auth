@@ -45,7 +45,7 @@ jobs:
           name: Deploy application
           command: sls deploy
 
-  build-graphql:
+  build_graphql:
     docker:
       - image: circleci/node:11.11
 
@@ -68,9 +68,27 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               yarn now --token $ZEIT_TOKEN alias
             fi
+  
+  build_frontend:
+    docker:
+      - image: circleci/node:11.11
+
+    working_directory: ~/project/frontend
+
+    steps:
+      - checkout:
+          path: ~/project
+
+      - install_deps  
+
+      - run:
+          name: Netlify Deploy
+          command: ./node_modules/.bin/netlify deploy --prod --dir=. --functions=functions
+
 workflows:
   version: 2
   build:
     jobs:
       - build_serverless
-      - build-graphql
+      - build_graphql
+      - build_frontend
