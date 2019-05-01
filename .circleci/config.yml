@@ -1,6 +1,10 @@
 # TODO: add monorepo features
 
 version: 2.1
+
+orbs:
+  compare-url: iynere/compare-url@0.4.10
+
 commands:
   install_deps:
     steps:
@@ -85,6 +89,39 @@ jobs:
           name: Netlify Deploy
           command: ./node_modules/.bin/netlify deploy --prod --dir=. --functions=functions
 
+  monorepo:
+    docker:
+      - image: circleci/circleci-cli
+    steps:
+      - checkout
+
+      - compare-url/reconstruct
+
+      - run:
+          command: |
+            # save value stored in file to a local env var
+            CIRCLE_COMPARE_URL=$(cat CIRCLE_COMPARE_URL.txt)
+
+            COMMIT_RANGE=$(echo $CIRCLE_COMPARE_URL | sed 's:^.*/compare/::g')
+
+            echo "Commit range: $COMMIT_RANGE"
+
+            for ORB in */; do
+
+              orbname=$(basename $ORB)
+
+              if [[ $(git diff --name-status  $COMMIT_RANGE -- | grep "$orbname") ]]; then
+
+                echo "publishing ${orbname}"
+
+                # circleci orb publish ${ORB}/orb.yml namespace/${orbname}@version
+              else
+                echo "${orbname} not modified; no need to publish"
+              fi
+            done
+          name: Publish modified orbs
+          # shell: /bin/bash -exo pipefail
+
 workflows:
   version: 2
   build:
@@ -92,3 +129,4 @@ workflows:
       - build_serverless
       - build_graphql
       - build_frontend
+      - monorepo
