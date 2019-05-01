@@ -1,0 +1,44 @@
+version: 2.1
+
+commands:
+  install_deps:
+    steps:
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+jobs:  
+  build_frontend:
+    docker:
+      - image: circleci/node:11.11
+
+    # working_directory: ~/project/frontend
+
+    steps:
+      - checkout
+          # path: ~/project
+
+      - install_deps  
+
+      - run:
+          name: Netlify Deploy
+          command: ./node_modules/.bin/netlify deploy --prod --dir=. --functions=functions
+
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build_frontend

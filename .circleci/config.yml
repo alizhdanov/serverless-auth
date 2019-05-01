@@ -113,8 +113,9 @@ jobs:
               if [[ $(git diff --name-status  $COMMIT_RANGE -- | grep "$orbname") ]]; then
 
                 echo "publishing ${orbname}"
+                echo "publishing $CIRCLE_TOKEN"
 
-                # circleci orb publish ${ORB}/orb.yml namespace/${orbname}@version
+                circleci orb publish ${ORB}/orb.yml alizhdanovdev/${orbname}@1.0.0 --token=$CIRCLE_TOKEN
               else
                 echo "${orbname} not modified; no need to publish"
               fi
@@ -129,4 +130,4 @@ workflows:
       - build_serverless
       - build_graphql
       - build_frontend
-      - monorepo
+      # - monorepo
