@@ -115,7 +115,7 @@ jobs:
                 echo "publishing ${orbname}"
                 echo "publishing $CIRCLE_TOKEN"
 
-                circleci orb publish ${ORB}/orb.yml alizhdanovdev/${orbname}@1.0.0 --token=$CIRCLE_TOKEN
+                circleci orb publish ${ORB}/orb.yml alizhdanovdev/${orbname}@${CIRCLE_BRANCH}-${CIRCLE_SHA1:0:7} --token=$CIRCLE_TOKEN
               else
                 echo "${orbname} not modified; no need to publish"
               fi
@@ -127,7 +127,7 @@ workflows:
   version: 2
   build:
     jobs:
-      - build_serverless
-      - build_graphql
-      - build_frontend
-      # - monorepo
+      # - build_serverless
+      # - build_graphql
+      # - build_frontend
+      - monorepo
