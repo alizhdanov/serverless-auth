@@ -115,7 +115,7 @@ jobs:
                 echo "publishing ${orbname}"
                 echo "publishing $CIRCLE_TOKEN"
 
-                circleci orb publish ${ORB}/orb.yml alizhdanovdev/${orbname}@${CIRCLE_BRANCH}-${CIRCLE_SHA1:0:7} --token=$CIRCLE_TOKEN
+                circleci orb publish ${ORB}/orb.yml alizhdanovdev/${orbname}@dev:${CIRCLE_BRANCH}-${CIRCLE_SHA1:0:7} --token=$CIRCLE_TOKEN
               else
                 echo "${orbname} not modified; no need to publish"
               fi
