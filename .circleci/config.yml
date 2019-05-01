@@ -1,5 +1,3 @@
-# TODO: add monorepo features
-
 version: 2.1
 
 orbs:
@@ -24,6 +22,24 @@ commands:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+  skip_job:
+    parameters:
+      project:
+        type: string
+    steps:
+      - attach_workspace:
+          at: /tmp/build
+
+      - run:
+          name: Terminate job if no changes
+          command: |
+            if [ -d "/tmp/build/<<parameters.project>>/" ]; then
+              echo "[STARTING] <<parameters.project>>"
+            else
+              echo "[SKIPPING] <<parameters.project>>"
+              circleci step halt
+            fi
+
 jobs:
   build_serverless:
     docker:
@@ -34,6 +50,9 @@ jobs:
     steps:
       - checkout:
           path: ~/project
+
+      - skip_job:
+          project: serverless
 
       - run:
           name: Install Serverless CLI
@@ -59,6 +78,9 @@ jobs:
       - checkout:
           path: ~/project
 
+      - skip_job:
+          project: graphql
+
       - install_deps
 
       - run:
@@ -83,6 +105,9 @@ jobs:
       - checkout:
           path: ~/project
 
+      - skip_job:
+          project: frontend
+
       - install_deps  
 
       - run:
@@ -98,6 +123,8 @@ jobs:
       - compare-url/reconstruct
 
       - run:
+          name: Find modified projects
+
           command: |
             # save value stored in file to a local env var
             CIRCLE_COMPARE_URL=$(cat CIRCLE_COMPARE_URL.txt)
@@ -106,28 +133,46 @@ jobs:
 
             echo "Commit range: $COMMIT_RANGE"
 
-            for ORB in */; do
+            mkdir /tmp/build/
 
-              orbname=$(basename $ORB)
+            touch /tmp/build/empty
 
-              if [[ $(git diff --name-status  $COMMIT_RANGE -- | grep "$orbname") ]]; then
+            for PROJECT in */; do
 
-                echo "publishing ${orbname}"
-                echo "publishing $CIRCLE_TOKEN"
+              projectname=$(basename $PROJECT)
 
-                circleci orb publish ${ORB}/orb.yml alizhdanovdev/${orbname}@dev:${CIRCLE_BRANCH}-${CIRCLE_SHA1:0:7} --token=$CIRCLE_TOKEN
+              if [[ $(git diff --name-status  $COMMIT_RANGE -- | grep "$projectname") ]]; then
+
+                echo "${projectname} modified"
+
+                mkdir /tmp/build/${PROJECT} -p
+
               else
-                echo "${orbname} not modified; no need to publish"
+                echo "${projectname} not modified"
               fi
             done
-          name: Publish modified orbs
-          # shell: /bin/bash -exo pipefail
+          
+      - persist_to_workspace:
+          root: /tmp/build/
+
+          paths:
+            - frontend
+            - graphql
+            - serverless
+            - empty
 
 workflows:
   version: 2
   build:
     jobs:
-      # - build_serverless
-      # - build_graphql
-      # - build_frontend
       - monorepo
+      - build_frontend:
+          requires:
+            - monorepo
+      - build_graphql:
+          requires:
+            - monorepo
+      - build_serverless:
+          requires:
+            - monorepo
+      

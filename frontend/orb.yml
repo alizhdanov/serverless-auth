@@ -32,6 +32,10 @@ jobs:
 
       - install_deps  
 
+      - run: pwd
+
+      - run: ls -la
+
       - run:
           name: Netlify Deploy
           command: ./node_modules/.bin/netlify deploy --prod --dir=. --functions=functions
