@@ -1,9 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
     <title>Ali Zhdanov's personal website.</title>
     <meta property="og:title" content="Ali Zhdanov's personal website" />
     <meta
@@ -16,171 +31,170 @@
     />
     <meta property="og:image" content="/assets/og-image.jpg" />
     <meta property="og:url" content="https://alizhdanov.dev/" />
-  </head>
-  <style>
-    :root {
-      --text: #666;
-      --primary: #173e43;
-      --animation-avatar: all 0.3s cubic-bezier(0.6, -0.28, 0.74, 0.05);
-    }
-
-    body {
-      margin: 0;
-      color: var(--text);
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    }
-
-    /* generic */
-
-    .flex {
-      display: flex;
-    }
-
-    .list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    /* design */
-
-    .layout {
-      height: 100vh;
-      width: 100vw;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      justify-items: center;
-    }
-
-    @media (max-width: 1023px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .greet > * {
-      margin: 0;
-    }
-
-    .greet h2 {
-      font-size: 6em;
-      color: var(--primary);
-      margin-bottom: 1rem;
-      line-height: 0.8;
-    }
-
-    .greet h3 {
-      font-size: 2em;
-    }
-
-    .greet p {
-      font-size: 1.5em;
-    }
-
-    .socials {
-      margin-top: 1rem;
-      font-size: 2.5em;
-    }
-
-    .socials li {
-      padding: 0 0.5rem;
-    }
-
-    .socials a {
-      color: var(--primary);
-    }
-
-    .socials a:hover {
-      color: var(--text);
-    }
-
-    .socials svg {
-      width: 1em;
-      height: 1em;
-      fill: currentColor;
-    }
-
-    .avatar-wrap {
-      position: relative;
-    }
-
-    .avatar {
-      width: 300px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .avatar-wrap .right {
-      position: absolute;
-      background: #6893a5;
-      width: 16em;
-      height: 25em;
-      top: -6em;
-      right: -4em;
-      z-index: 1;
-      transition: var(--animation-avatar);
-    }
-
-    .avatar-wrap .left {
-      position: absolute;
-      background: var(--primary);
-      width: 22em;
-      height: 15em;
-      z-index: 0;
-      bottom: -5em;
-      right: 1em;
-      transition: var(--animation-avatar);
-    }
-
-    .avatar-wrap .avatar:hover + div .right {
-      width: 100%;
-      height: 100%;
-      top: -1em;
-      right: -1em;
-    }
-
-    .avatar-wrap .avatar:hover + div .left {
-      width: 100%;
-      height: 100%;
-      bottom: -1em;
-      right: 1em;
-    }
-
-    @media (max-width: 1023px) {
-      .layout {
-        padding: 1.5em 0;
-        grid-template-columns: 1fr;
-        grid-gap: 1.5em;
+    <style>
+      :root {
+        --text: #666;
+        --primary: #173e43;
+        --animation-avatar: all 0.3s cubic-bezier(0.6, -0.28, 0.74, 0.05);
       }
 
-      .greet {
-        text-align: center;
+      body {
+        margin: 0;
+        color: var(--text);
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      }
+
+      /* generic */
+
+      .flex {
+        display: flex;
+      }
+
+      .list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* design */
+
+      .layout {
+        height: 100vh;
+        width: 100vw;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        justify-items: center;
+      }
+
+      @media (max-width: 1023px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .greet > * {
+        margin: 0;
       }
 
       .greet h2 {
-        font-size: 4em;
+        font-size: 6em;
+        color: var(--primary);
+        margin-bottom: 1rem;
+        line-height: 0.8;
+      }
+
+      .greet h3 {
+        font-size: 2em;
+      }
+
+      .greet p {
+        font-size: 1.5em;
       }
 
       .socials {
-        justify-content: center;
+        margin-top: 1rem;
+        font-size: 2.5em;
+      }
+
+      .socials li {
+        padding: 0 0.5rem;
+      }
+
+      .socials a {
+        color: var(--primary);
+      }
+
+      .socials a:hover {
+        color: var(--text);
+      }
+
+      .socials svg {
+        width: 1em;
+        height: 1em;
+        fill: currentColor;
+      }
+
+      .avatar-wrap {
+        position: relative;
+      }
+
+      .avatar {
+        position: relative;
+        z-index: 2;
+      }
+
+      .avatar-wrap .right {
+        position: absolute;
+        background: #6893a5;
+        width: 16em;
+        height: 25em;
+        top: -6em;
+        right: -4em;
+        z-index: 1;
+        transition: var(--animation-avatar);
       }
 
       .avatar-wrap .left {
+        position: absolute;
+        background: var(--primary);
+        width: 22em;
+        height: 15em;
+        z-index: 0;
+        bottom: -5em;
+        right: 1em;
+        transition: var(--animation-avatar);
+      }
+
+      .avatar-wrap .avatar:hover + div .right {
+        width: 100%;
+        height: 100%;
+        top: -1em;
+        right: -1em;
+      }
+
+      .avatar-wrap .avatar:hover + div .left {
         width: 100%;
         height: 100%;
         bottom: -1em;
         right: 1em;
       }
 
-      .avatar-wrap .right {
-        width: 100%;
-        height: 100%;
-        top: -1em;
-        right: -1em;
+      @media (max-width: 1023px) {
+        .layout {
+          padding: 1.5em 0;
+          grid-template-columns: 1fr;
+          grid-gap: 1.5em;
+        }
+
+        .greet {
+          text-align: center;
+        }
+
+        .greet h2 {
+          font-size: 4em;
+        }
+
+        .socials {
+          justify-content: center;
+        }
+
+        .avatar-wrap .left {
+          width: 100%;
+          height: 100%;
+          bottom: -1em;
+          right: 1em;
+        }
+
+        .avatar-wrap .right {
+          width: 100%;
+          height: 100%;
+          top: -1em;
+          right: -1em;
+        }
       }
-    }
-  </style>
+    </style>
+  </head>
   <body>
     <div class="layout">
       <div class="greet">
@@ -233,7 +247,7 @@
       </div>
       <div>
         <div class="avatar-wrap">
-          <picture>
+          <picture class="avatar">
             <source
               srcset="/assets/avatar.webp, /assets/avatar-2x.webp 2x"
               type="image/webp"
@@ -245,7 +259,6 @@
             <img
               src="/assets/avatar.jpg"
               alt="avatar"
-              class="avatar"
               width="300"
               height="400"
             />
@@ -259,5 +272,17 @@
         <!-- TODO: icons from https://simpleicons.org/ add it somewhere -->
       </div>
     </div>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
   </body>
 </html>
