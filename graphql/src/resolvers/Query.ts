@@ -53,5 +53,7 @@ export const Query = objectType({
         return data;
       },
     });
+
+    t.string('test', () => 'GraphQL is working!');
   },
 });

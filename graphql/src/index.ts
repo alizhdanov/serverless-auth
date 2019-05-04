@@ -33,6 +33,7 @@ async function startServer() {
     Query: {
       instagram: isAuthenticated,
       github: isAuthenticated,
+      test: not(isAuthenticated),
     },
     Mutation: {
       login: not(isAuthenticated),

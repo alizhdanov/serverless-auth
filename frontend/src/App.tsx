@@ -1,6 +1,5 @@
 import React from 'react';
-import ApolloClient from 'apollo-boost';
-import { gql } from 'apollo-boost';
+import ApolloClient, { gql } from 'apollo-boost';
 import logo from './logo.svg';
 import './App.css';
 
@@ -12,9 +11,7 @@ client
   .query({
     query: gql`
       {
-        instagram {
-          id
-        }
+        test
       }
     `,
   })
