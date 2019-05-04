@@ -32,7 +32,7 @@ const App: React.FC = () => {
         >
           {({ loading, error, data }) => {
             if (loading) return <p>Loading...</p>;
-            if (error) return <p>Error :(</p>;
+            if (error) return <p>Error:(</p>;
 
             return data && data.test;
           }}

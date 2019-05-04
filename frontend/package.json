@@ -20,7 +20,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "./node_modules/.bin/netlify deploy --dir=build --functions=functions --site=461008de-f59c-486a-8e98-1365e18d2b7c",
+    "deploy": "./node_modules/.bin/netlify deploy --dir=build --functions=functions --site=461008de-f59c-486a-8e98-1365e18d2b7c --prod",
     "codegen": "graphql-codegen --config codegen.yml"
   },
   "eslintConfig": {
