@@ -6,9 +6,13 @@ conssits of:
 - backend
 - serverless
 
-## CI
+## Disclaimer
 
-Powered by [circleci](https://circleci.com/). The ci will check which projects were changed and will run jobs only for specifc project. Therefore, CI time will increase if you have changed only some project also it wouldn't do useless builds.
+You can consider this project as an educational. That's why some aproaches might not be the best, but it's here just because I want to learn something new, try technologies in combination with each other and potentially share code to help others (at leat I hope so 😊) .
+
+## CI and CD
+
+Powered by [circleci](https://circleci.com/). The ci will check which projects were changed and will run jobs only for specifc project. Therefore, CI time will increase if you have changed only some project also it wouldn't do useless builds. All builds from master which passed all tests deployed sraight to production. In future all merge requests should be deployed for tesing, but not now.
 
 ## Serverless
 
@@ -23,7 +27,7 @@ The service is pretty basic for now and implementing only two endpoints:
 
 GraphQL part written in [Typescript](https://www.typescriptlang.org/), based on [GraphQL yoga](https://github.com/prisma/graphql-yoga) server and daployed to [NOW](https://zeit.co/now).
 
-The main idea behind it is to show capabilities of GraphQL. By combining different services in one place, and providing nice unify GraphQL API for frontnend. It was implemented by transforming and proxying REST services into GraphQL queries and mutations and by [schema stiching](https://www.apollographql.com/docs/graphql-tools/schema-stitching) third party GraphQL services.
+The main idea behind it is to show capabilities of GraphQL. By combining different services in one place, and providing nice unify GraphQL API for frontnend. It was implemented by transforming and proxying REST services into GraphQL queries and mutations by [GraphQL Nexus](https://github.com/prisma/nexus) and by [schema stiching](https://www.apollographql.com/docs/graphql-tools/schema-stitching) third party GraphQL services.
 
 ### Services:
 
@@ -39,7 +43,7 @@ JWT is used for authentication provided by authentication service. Public key is
 
 ## Frontend [https://alizhdanov.dev/](https://alizhdanov.dev/)
 
-Frontend part divided by two main sections Hero and SPA.
+Frontend part divided by two main sections Hero and SPA. Deployed to [Netlify](https://netlify.com)
 
 ### Hero
 

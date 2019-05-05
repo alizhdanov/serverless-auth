@@ -68,7 +68,12 @@ jobs:
 
       - run:
           name: Deploy application
-          command: sls deploy
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              sls deploy
+            else
+              echo "temporary skipping production deploy for pull requests"
+            fi
 
   build_graphql:
     docker:
@@ -95,6 +100,8 @@ jobs:
 
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               yarn now --token $ZEIT_TOKEN alias
+            else
+              echo "temporary skipping production deploy for pull requests"
             fi
   
   build_frontend:
@@ -118,7 +125,12 @@ jobs:
 
       - run:
           name: Netlify Deploy
-          command: yarn run deploy
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              yarn run deploy
+            else
+              echo "temporary skipping production deploy for pull requests"
+            fi
 
   monorepo:
     docker:
