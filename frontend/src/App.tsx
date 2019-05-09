@@ -1,7 +1,7 @@
 import React from 'react';
-import ApolloClient, { gql } from 'apollo-boost';
+import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
-import { Query } from 'react-apollo';
+import Instagram from './instagram/Instagram';
 
 import logo from './logo.svg';
 import './App.css';
@@ -23,20 +23,7 @@ const App: React.FC = () => {
           <h3>Wait for it!</h3>
           <p>This part under development.</p>
         </header>
-        <Query<Data>
-          query={gql`
-            {
-              test
-            }
-          `}
-        >
-          {({ loading, error, data }) => {
-            if (loading) return <p>Loading...</p>;
-            if (error) return <p>Error:(</p>;
-
-            return data && data.test;
-          }}
-        </Query>
+        <Instagram />
       </div>
     </ApolloProvider>
   );

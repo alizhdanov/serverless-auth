@@ -22,6 +22,15 @@ export const Images = objectType({
   },
 });
 
+export const Location = objectType({
+  name: 'Location',
+  definition(t) {
+    t.string('name');
+    t.int('latitude');
+    t.int('longtitude');
+  },
+});
+
 export const InstagramItem = objectType({
   name: 'InstagramItem',
   definition(t) {
@@ -32,6 +41,10 @@ export const InstagramItem = objectType({
     t.string('filter');
     t.field('images', {
       type: Images,
+    });
+    t.field('location', {
+      type: Location,
+      nullable: true,
     });
   },
 });
