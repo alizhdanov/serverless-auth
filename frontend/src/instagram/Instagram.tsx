@@ -6,14 +6,20 @@ import styled from 'styled-components';
 import { InstagramQuery } from '../../generated/graphql';
 import { ReactComponent as LogoIcon } from './like.svg';
 import { ReactComponent as ChatIcon } from './chat.svg';
+import Heading from '../components/Heading';
+
+// TODO: set nice loader and error message
+
+const Wrap = styled.div`
+  background-color: #282c34;
+  padding: 2em 4em;
+`;
 
 const List = styled.ul`
-  background-color: #282c34;
   margin: 0;
   padding: 0;
   list-style-type: none;
   display: grid;
-  padding: 2em 4em;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   grid-gap: 1em;
   justify-items: center;
@@ -53,58 +59,66 @@ const ExtraItem = styled.div`
 
 const Instagram: React.FC = () => {
   return (
-    <Query<InstagramQuery>
-      query={gql`
-        query Instagram {
-          instagram {
-            id
-            likes
-            comments
-            images {
-              lowResolution {
-                width
-                height
-                url
+    <Wrap>
+      <Heading align="center" color="light">
+        Latest from instagram
+      </Heading>
+      <Query<InstagramQuery>
+        query={gql`
+          query Instagram {
+            instagram {
+              cursor
+              nodes {
+                id
+                likes
+                comments
+                images {
+                  lowResolution {
+                    width
+                    height
+                    url
+                  }
+                }
+                location {
+                  name
+                }
               }
             }
-            location {
-              name
-            }
           }
-        }
-      `}
-    >
-      {({ loading, error, data }) => {
-        if (loading) return <p>Loading...</p>;
-        if (error) return <p>Error:(</p>;
+        `}
+      >
+        {({ loading, error, data }) => {
+          if (loading) return <p>Loading...</p>;
+          if (error) return <p>Error:(</p>;
 
-        if (!data) {
-          return null;
-        }
+          if (!data) {
+            return null;
+          }
 
-        return (
-          <List>
-            {data.instagram.map(item => (
-              <ListItem key={item.id}>
-                {/* TODO: set lazy attr */}
-                <Img src={item.images.lowResolution.url} alt="" />
-                <Extra>
-                  <ExtraLocation>
-                    {item.location && item.location.name}
-                  </ExtraLocation>
-                  <ExtraItem>
-                    <LogoIcon width="14" height="14" /> {item.likes}
-                  </ExtraItem>
-                  <ExtraItem>
-                    <ChatIcon width="14" height="14" /> {item.comments}
-                  </ExtraItem>
-                </Extra>
-              </ListItem>
-            ))}
-          </List>
-        );
-      }}
-    </Query>
+          return (
+            <List>
+              {data.instagram.nodes.map(item => (
+                <ListItem key={item.id}>
+                  {/* TODO: set lazy attr */}
+                  <Img src={item.images.lowResolution.url} alt="" />
+                  <Extra>
+                    <ExtraLocation>
+                      {item.location && item.location.name}
+                    </ExtraLocation>
+                    <ExtraItem>
+                      <LogoIcon width="14" height="14" /> {item.likes}
+                    </ExtraItem>
+                    <ExtraItem>
+                      <ChatIcon width="14" height="14" /> {item.comments}
+                    </ExtraItem>
+                  </Extra>
+                </ListItem>
+              ))}
+            </List>
+          );
+        }}
+      </Query>
+    </Wrap>
   );
 };
 

@@ -2809,6 +2809,11 @@ export type InstagramItem = {
   location?: Maybe<Location>;
 };
 
+export type InstagramPagination = {
+  cursor: Scalars["String"];
+  nodes: Array<InstagramItem>;
+};
+
 /** An Issue is a place to discuss ideas, enhancements, tasks, and bugs for a project. */
 export type Issue = Node &
   Assignable &
@@ -4528,12 +4533,14 @@ export type PinnableItemEdge = {
   node?: Maybe<PinnableItem>;
 };
 
-/** Represents items that can be pinned to a profile page. */
+/** Represents items that can be pinned to a profile page or dashboard. */
 export enum PinnableItemType {
   /** A repository. */
   Repository = "REPOSITORY",
   /** A gist. */
-  Gist = "GIST"
+  Gist = "GIST",
+  /** An issue. */
+  Issue = "ISSUE"
 }
 
 /** Represents a 'pinned' event on a given issue or pull request. */
@@ -6003,10 +6010,15 @@ export type PushAllowanceEdge = {
 };
 
 export type Query = {
-  instagram: Array<InstagramItem>;
+  instagram: InstagramPagination;
   test: Scalars["String"];
   /** The currently authenticated user. */
   github: User;
+};
+
+export type QueryInstagramArgs = {
+  count: Scalars["Int"];
+  after?: Maybe<Scalars["String"]>;
 };
 
 /** Represents the client's rate limit. */
@@ -9231,20 +9243,27 @@ export enum UserStatusOrderField {
 export type InstagramQueryVariables = {};
 
 export type InstagramQuery = { __typename?: "Query" } & {
-  instagram: Array<
-    { __typename?: "InstagramItem" } & Pick<
-      InstagramItem,
-      "id" | "likes" | "comments"
-    > & {
-        images: { __typename?: "Images" } & {
-          lowResolution: { __typename?: "Image" } & Pick<
-            Image,
-            "width" | "height" | "url"
-          >;
-        };
-        location: Maybe<{ __typename?: "Location" } & Pick<Location, "name">>;
-      }
-  >;
+  instagram: { __typename?: "InstagramPagination" } & Pick<
+    InstagramPagination,
+    "cursor"
+  > & {
+      nodes: Array<
+        { __typename?: "InstagramItem" } & Pick<
+          InstagramItem,
+          "id" | "likes" | "comments"
+        > & {
+            images: { __typename?: "Images" } & {
+              lowResolution: { __typename?: "Image" } & Pick<
+                Image,
+                "width" | "height" | "url"
+              >;
+            };
+            location: Maybe<
+              { __typename?: "Location" } & Pick<Location, "name">
+            >;
+          }
+      >;
+    };
 };
 
 import gql from "graphql-tag";
@@ -9254,19 +9273,22 @@ export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 export const InstagramDocument = gql`
   query Instagram {
-    instagram {
-      id
-      likes
-      comments
-      images {
-        lowResolution {
-          width
-          height
-          url
+    instagram(count: 5) {
+      cursor
+      nodes {
+        id
+        likes
+        comments
+        images {
+          lowResolution {
+            width
+            height
+            url
+          }
         }
-      }
-      location {
-        name
+        location {
+          name
+        }
       }
     }
   }

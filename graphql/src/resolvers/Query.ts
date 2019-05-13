@@ -1,5 +1,6 @@
-import { objectType } from 'nexus';
+import { objectType, intArg, stringArg, interfaceType } from 'nexus';
 import fetch from 'node-fetch';
+import querystring from 'querystring';
 
 export const Image = objectType({
   name: 'Image',
@@ -49,21 +50,37 @@ export const InstagramItem = objectType({
   },
 });
 
+export const Instagram = objectType({
+  name: 'InstagramPagination',
+  definition(t) {
+    t.string('cursor', { nullable: true });
+    t.list.field('nodes', { type: InstagramItem });
+  },
+});
+
 export const Query = objectType({
   name: 'Query',
   definition(t) {
-    t.list.field('instagram', {
-      type: InstagramItem,
-      resolve: async () => {
+    t.field('instagram', {
+      type: Instagram,
+      args: {
+        count: intArg({ default: 20 }),
+        after: stringArg({ nullable: true }),
+      },
+      resolve: async (_, { count, after, before }) => {
+        const params = querystring.stringify({
+          access_token: process.env.INSTAGRAM_TOKEN,
+          count,
+          ...(after && { max_id: after }),
+        });
+
         const response = await fetch(
-          `https://api.instagram.com/v1/users/self/media/recent?access_token=${
-            process.env.INSTAGRAM_TOKEN
-          }`
+          `https://api.instagram.com/v1/users/self/media/recent?${params}`
         );
 
-        const { data } = await response.json();
+        const { data, pagination } = await response.json();
 
-        return data;
+        return { nodes: data, cursor: pagination.next_max_id };
       },
     });
 
