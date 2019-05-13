@@ -7,7 +7,7 @@ import Github from './github/Github';
 import './App.css';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4444',
+  uri: process.env.REACT_APP_GRAPHQL_URL,
 });
 
 interface Data {
