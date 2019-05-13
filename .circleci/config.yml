@@ -96,10 +96,10 @@ jobs:
 
       - deploy:
           command: |
-            yarn now --token $ZEIT_TOKEN --local-config now.json
+            yarn now --token $ZEIT_TOKE
 
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              yarn now --token $ZEIT_TOKEN --local-config now.json alias 
+              yarn now --token $ZEIT_TOKEN alias 
             else
               echo "temporary skipping production deploy for pull requests"
             fi

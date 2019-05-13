@@ -48,7 +48,7 @@ const Meta = styled.div`
 const Github = () => {
   return (
     <Wrap>
-      <Heading align="center">Pinned on Github:</Heading>
+      <Heading align="center">Pinned on Github</Heading>
       <Query<GithubQuery>
         query={gql`
           query Github {
