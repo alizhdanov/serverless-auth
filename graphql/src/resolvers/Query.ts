@@ -84,6 +84,6 @@ export const Query = objectType({
       },
     });
 
-    t.string('test', () => 'GraphQL is working');
+    t.string('test', () => 'GraphQL is working!');
   },
 });
