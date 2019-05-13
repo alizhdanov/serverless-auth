@@ -8,7 +8,7 @@ import { getUser } from './utils/jwt';
 import { generateSchema as githubSchemaGenerator } from './schemas/github';
 import * as query from './resolvers/Query';
 import * as mutation from './resolvers/Mutation';
-import { rule, shield, not } from 'graphql-shield';
+import { rule, shield, not, allow } from 'graphql-shield';
 
 async function startServer() {
   const localSchema = makeSchema({
@@ -26,18 +26,17 @@ async function startServer() {
   });
 
   const isAuthenticated = rule()(async (parent, args, ctx, info) => {
-    return ctx.user !== null;
+    return process.env.NODE_ENV === 'dev' || ctx.user !== null;
   });
 
   const permissions = shield({
     Query: {
+      '*': allow,
       instagram: isAuthenticated,
       github: isAuthenticated,
-      test: not(isAuthenticated),
     },
     Mutation: {
-      login: not(isAuthenticated),
-      signup: not(isAuthenticated),
+      '*': allow,
     },
   });
 
