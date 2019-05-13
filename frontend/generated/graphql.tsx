@@ -2810,7 +2810,7 @@ export type InstagramItem = {
 };
 
 export type InstagramPagination = {
-  cursor: Scalars["String"];
+  cursor?: Maybe<Scalars["String"]>;
   nodes: Array<InstagramItem>;
 };
 
@@ -9240,6 +9240,33 @@ export enum UserStatusOrderField {
   UpdatedAt = "UPDATED_AT"
 }
 
+export type GithubQueryVariables = {};
+
+export type GithubQuery = { __typename?: "Query" } & {
+  github: { __typename?: "User" } & {
+    pinnedItems: { __typename?: "PinnableItemConnection" } & {
+      nodes: Maybe<
+        Array<
+          Maybe<
+            { __typename?: "Repository" } & Pick<
+              Repository,
+              "id" | "name" | "description" | "url"
+            > & {
+                primaryLanguage: Maybe<
+                  { __typename?: "Language" } & Pick<Language, "name" | "color">
+                >;
+                stargazers: { __typename?: "StargazerConnection" } & Pick<
+                  StargazerConnection,
+                  "totalCount"
+                >;
+              }
+          >
+        >
+      >;
+    };
+  };
+};
+
 export type InstagramQueryVariables = {};
 
 export type InstagramQuery = { __typename?: "Query" } & {
@@ -9271,9 +9298,67 @@ import * as React from "react";
 import * as ReactApollo from "react-apollo";
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
+export const GithubDocument = gql`
+  query Github {
+    github {
+      pinnedItems(first: 20, types: REPOSITORY) {
+        nodes {
+          ... on Repository {
+            id
+            name
+            description
+            url
+            primaryLanguage {
+              name
+              color
+            }
+            stargazers {
+              totalCount
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GithubComponent = (
+  props: Omit<
+    Omit<ReactApollo.QueryProps<GithubQuery, GithubQueryVariables>, "query">,
+    "variables"
+  > & { variables?: GithubQueryVariables }
+) => (
+  <ReactApollo.Query<GithubQuery, GithubQueryVariables>
+    query={GithubDocument}
+    {...props}
+  />
+);
+
+export type GithubProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<GithubQuery, GithubQueryVariables>
+> &
+  TChildProps;
+export function withGithub<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    GithubQuery,
+    GithubQueryVariables,
+    GithubProps<TChildProps>
+  >
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    GithubQuery,
+    GithubQueryVariables,
+    GithubProps<TChildProps>
+  >(GithubDocument, {
+    alias: "withGithub",
+    ...operationOptions
+  });
+}
 export const InstagramDocument = gql`
   query Instagram {
-    instagram(count: 5) {
+    instagram {
       cursor
       nodes {
         id

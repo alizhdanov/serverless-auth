@@ -2,6 +2,7 @@ import React from 'react';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 import Instagram from './instagram/Instagram';
+import Github from './github/Github';
 
 import logo from './logo.svg';
 import './App.css';
@@ -18,6 +19,7 @@ const App: React.FC = () => {
   return (
     <ApolloProvider client={client}>
       <div className="App">
+        <Github />
         <Instagram />
       </div>
     </ApolloProvider>
